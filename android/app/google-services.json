@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "872277913018",
+    "project_id": "my-notes-anu",
+    "storage_bucket": "my-notes-anu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872277913018:android:b8bbf776ebeb4b93520183",
+        "android_client_info": {
+          "package_name": "com.example.my_notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyjlrThaKe2TLVNw6E1cSna-wEO_RG87c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

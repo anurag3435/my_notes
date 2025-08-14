@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import "dart:developer" as devtool;
+
+import 'package:my_notes/views/login_view.dart';
+//understanding basics of dart!!
+//extensions 
+
+
+
 
 void main() {
-  runApp(const MyApp(
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: "my notes",
+    home: LoginView(),
   ));
-}
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-    );
-    
-  }
 }
