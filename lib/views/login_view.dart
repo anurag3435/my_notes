@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import "dart:developer" as devtool;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -68,6 +70,16 @@ class _LoginViewState extends State<LoginView> {
               
             } , child: const Text("Login",style: TextStyle(fontSize: 35,color: Colors.white60),),),
           ),
+          TextButton(onPressed: () async{
+            final email = _emailcontroller.text;
+            final password = _passwordcontroller.text;
+            final UserCredential = await FirebaseAuth.instance.
+            signInWithEmailAndPassword(
+              email: email,
+              password: password,
+              );
+            devtool.log(UserCredential.toString());
+          }, child: const Text("haven't register yet? register"))
 
         ],
       ),

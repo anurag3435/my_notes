@@ -1,17 +1,22 @@
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import "dart:developer" as devtool;
+
 
 import 'package:my_notes/views/login_view.dart';
-//understanding basics of dart!!
-//extensions 
+import 'package:my_notes/views/register_view.dart';
 
 
 
 
+// havent added option how to do it ??
 void main() {
+  Firebase.initializeApp(
+    // options: 
+  );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "my notes",
-    home: LoginView(),
+    home: RegisterView(),
   ));
 }
