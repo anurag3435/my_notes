@@ -68,7 +68,7 @@ class _LoginViewState extends State<LoginView> {
               
             } , child: const Text("Login",style: TextStyle(fontSize: 35,color: Colors.white60),),),
           ),
-          
+
         ],
       ),
       ),
