@@ -2,6 +2,7 @@ import "dart:developer" as devtool;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/utilities/snackbar.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -72,19 +73,49 @@ class _RegisterViewState extends State<RegisterView> {
                 onPressed: () async {
                   final email = _emailcontroller.text;
                   final password = _passwordcontroller.text;
-                  final UserCredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      devtool.log(UserCredential.toString());
+                  if (email.isEmpty || password.isEmpty) {
+                    showCustomSnackBar(context, "fill all fields");
+                    return;
+
+                  }
+                  else {try {
+                    final userCredential = await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
+                        if (!mounted)return;
+                        devtool.log(userCredential.toString());
+
+
+                  } on FirebaseAuthException catch (e) {
+                    if (e.code == "invalid-email") {
+                      if(!mounted)return;
+                     showCustomSnackBar(context, "enter valid email");
+                    }
+                    else if (e.code == "weak-password") {
+                      showCustomSnackBar(context, "use a mixed password");
+                    }
+                    else {
+                      showCustomSnackBar(context, "${e.message}");
+                    }
+                  }
+                  catch (_) {
+                    showCustomSnackBar(context, "something went wrong,try again");
+                  }
+                     
+                    }
+        
+                     
                       
                 },
                 child: const Text(
                   "Register",
                   style: TextStyle(fontSize: 35, color: Colors.white60),
                 ),
+                
               ),
+              
             ),
           ],
         ),

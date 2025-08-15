@@ -1,7 +1,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'firebase_options.dart';
 
 import 'package:my_notes/views/login_view.dart';
 import 'package:my_notes/views/register_view.dart';
@@ -9,14 +9,15 @@ import 'package:my_notes/views/register_view.dart';
 
 
 
-// havent added option how to do it ??
-void main() {
-  Firebase.initializeApp(
-    // options: 
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized(); // to make sure engine is ready 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: "my notes",
-    home: RegisterView(),
+    title: "my notes", //where is this displayed?
+    home: LoginView(),
   ));
 }
