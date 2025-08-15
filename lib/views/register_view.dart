@@ -86,6 +86,8 @@ class _RegisterViewState extends State<RegisterView> {
                         );
                         if (!mounted)return;
                         devtool.log(userCredential.toString());
+                        showCustomSnackBar(context, "registered successfully");
+                        Navigator.pushReplacementNamed(context, "/emailVerify");
 
 
                   } on FirebaseAuthException catch (e) {
@@ -117,6 +119,9 @@ class _RegisterViewState extends State<RegisterView> {
               ),
               
             ),
+            TextButton(onPressed: () {
+              Navigator.pushReplacementNamed(context, "/login");
+            }, child: const Text("already login? login here!"),),
           ],
         ),
       ),

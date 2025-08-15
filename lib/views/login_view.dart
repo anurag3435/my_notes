@@ -84,6 +84,18 @@ class _LoginViewState extends State<LoginView> {
                           email: email,
                           password: password,
                         );
+                         final user = FirebaseAuth.instance.currentUser;
+                         if (!mounted) return;
+                        if (user!= null) {
+                          if (user.emailVerified); {
+                            showCustomSnackBar(context, "email verifed");
+                            Navigator.pushReplacementNamed(context, "/notes");
+                          }
+                          
+                        }
+                        else {
+                          showCustomSnackBar(context, "something went wrong");
+                        }
                         if (!mounted)return;
                         devtool.log(userCredential.toString());
 
@@ -117,6 +129,9 @@ class _LoginViewState extends State<LoginView> {
               ),
               
             ),
+            TextButton(onPressed: () {
+              Navigator.pushReplacementNamed(context, "/register");
+            }, child: const Text("haven't registered yet! register here"),),
           ],
         ),
       ),

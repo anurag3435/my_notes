@@ -1,0 +1,88 @@
+//before working on this file first read all the previous files 
+//  ESPECIALLY SNACKBAR
+
+/* 
+things to do in verifyEmailView:
+-stf widget 
+-scaffold 
+- three buttons (sendEmailverify,verficationStatus,go back to login page)
+*/
+// front end done!
+// backend still left to do!! 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:my_notes/utilities/snackbar.dart';
+
+class VerifyEmail extends StatefulWidget {
+  const VerifyEmail({super.key});
+
+  @override
+  State<VerifyEmail> createState() => _VerifyEmailState();
+}
+
+class _VerifyEmailState extends State<VerifyEmail> {
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+        appBar: AppBar(
+            title: const Text("verifyEmail"),
+            backgroundColor: Colors.blueGrey,
+        ),
+        body:Padding(
+          padding: const EdgeInsets.only(top: 300),
+          child: Center(child: Column(children: [
+              TextButton(
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
+                  onPressed: () async{
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user!= null) {
+                  await user.sendEmailVerification(); 
+                  showCustomSnackBar(context, "email verification sent");
+                  }
+                  else {
+                    showCustomSnackBar(context, "no user found");
+                  }
+                  }, 
+                  child: const Text("send verfication email",
+                style: TextStyle(color: Colors.white),)),
+                
+
+              TextButton(
+                style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
+                onPressed: () async{
+                  final user = FirebaseAuth.instance.currentUser;
+                  user?.reload();
+                  if(user!= null) {
+                    if (user.emailVerified) {
+                      showCustomSnackBar(context, "email verified");
+                      Navigator.pushReplacementNamed(context, "/notes");
+                    }
+                    else {
+                      showCustomSnackBar(context, "something went wrong");
+                    }
+                  }
+
+
+                },
+                child: const Text("verification status",
+                style: TextStyle(color: Colors.white),)),
+              
+
+              TextButton(
+                style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
+                onPressed: () async{
+                  Navigator.pushReplacementNamed(context, "/login");
+                },
+                child: const Text("back to login",
+                style: TextStyle(color: Colors.white),)),
+              
+          ],
+          ),
+                ),
+        ),
+    );
+  }
+}
