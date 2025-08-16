@@ -1,6 +1,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/views/notes_view.dart';
 import 'package:my_notes/views/verify_email.dart';
 import 'firebase_options.dart';
@@ -18,10 +19,10 @@ void main() async{
     title: "my notes", //where is this displayed?
     home: LoginView(),
     routes: {
-      "/login" : (context) => LoginView(),
-      "/register" : (context) =>RegisterView(),
-      "/emailVerify" : (context) =>VerifyEmail(),
-      "/notes" : (context) => NotesView(),
+      loginRoute : (context) => LoginView(),
+      registerRoute : (context) =>RegisterView(),
+      emailVerifyRoute : (context) =>VerifyEmail(),
+      notesRoute : (context) => NotesView(),
     }
     
   ));

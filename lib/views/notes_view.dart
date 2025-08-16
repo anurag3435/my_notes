@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/constants/routes.dart';
 
 
 import 'package:my_notes/utilities/snackbar.dart';
@@ -31,7 +32,7 @@ class _NotesViewState extends State<NotesView> {
              }
 
               if(!context.mounted)return;
-              Navigator.pushNamedAndRemoveUntil(context, "/login", (_) => false,);
+              Navigator.pushNamedAndRemoveUntil(context, loginRoute, (_) => false,);
             }
           } , itemBuilder: (context) => [
             const PopupMenuItem<MenuAction>(

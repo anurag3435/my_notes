@@ -2,6 +2,7 @@ import "dart:developer" as devtool;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class RegisterView extends StatefulWidget {
@@ -84,10 +85,10 @@ class _RegisterViewState extends State<RegisterView> {
                           email: email,
                           password: password,
                         );
-                        if (!mounted)return;
+                        if (!context.mounted)return;
                         devtool.log(userCredential.toString());
                         showCustomSnackBar(context, "registered successfully");
-                        Navigator.pushReplacementNamed(context, "/emailVerify");
+                        Navigator.pushReplacementNamed(context, emailVerifyRoute);
 
 
                   } on FirebaseAuthException catch (e) {
@@ -97,6 +98,9 @@ class _RegisterViewState extends State<RegisterView> {
                     }
                     else if (e.code == "weak-password") {
                       showCustomSnackBar(context, "use a mixed password");
+                    }
+                    else if (e.code == "email-already-in-use") {
+                      showCustomSnackBar(context, "email already in use");
                     }
                     else {
                       showCustomSnackBar(context, "${e.message}");
@@ -120,7 +124,7 @@ class _RegisterViewState extends State<RegisterView> {
               
             ),
             TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context, "/login");
+              Navigator.pushReplacementNamed(context, loginRoute);
             }, child: const Text("already login? login here!"),),
           ],
         ),

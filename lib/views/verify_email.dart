@@ -11,6 +11,7 @@ things to do in verifyEmailView:
 // backend still left to do!! 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -57,7 +58,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   if(user!= null) {
                     if (user.emailVerified) {
                       showCustomSnackBar(context, "email verified");
-                      Navigator.pushReplacementNamed(context, "/notes");
+                      Navigator.pushReplacementNamed(context, notesRoute);
                     }
                     else {
                       showCustomSnackBar(context, "something went wrong");
@@ -74,7 +75,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                 style: ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
                 onPressed: () async{
-                  Navigator.pushReplacementNamed(context, "/login");
+                  Navigator.pushReplacementNamed(context, loginRoute);
                 },
                 child: const Text("back to login",
                 style: TextStyle(color: Colors.white),)),

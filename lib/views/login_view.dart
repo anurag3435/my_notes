@@ -2,6 +2,7 @@ import "dart:developer" as devtool;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class LoginView extends StatefulWidget {
@@ -85,11 +86,11 @@ class _LoginViewState extends State<LoginView> {
                           password: password,
                         );
                          final user = FirebaseAuth.instance.currentUser;
-                         if (!mounted) return;
+                         if (!context.mounted) return;
                         if (user!= null) {
-                          if (user.emailVerified); {
+                          if (user.emailVerified) {
                             showCustomSnackBar(context, "email verifed");
-                            Navigator.pushReplacementNamed(context, "/notes");
+                            Navigator.pushReplacementNamed(context, notesRoute);
                           }
                           
                         }
@@ -107,6 +108,9 @@ class _LoginViewState extends State<LoginView> {
                     }
                     else if (e.code == "wrong-password") {
                       showCustomSnackBar(context, "wrong password");
+                    }
+                    else if (e.code == "user-not-found") {
+                      showCustomSnackBar(context, "user not found");
                     }
                     else {
                       showCustomSnackBar(context, "${e.message}");
@@ -130,7 +134,7 @@ class _LoginViewState extends State<LoginView> {
               
             ),
             TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context, "/register");
+              Navigator.pushReplacementNamed(context, registerRoute);
             }, child: const Text("haven't registered yet! register here"),),
           ],
         ),
