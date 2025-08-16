@@ -1,8 +1,8 @@
 import "dart:developer" as devtool;
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_notes/constants/routes.dart';
+import 'package:my_notes/services/auth/auth_exceptions.dart';
+import 'package:my_notes/services/auth/auth_service.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class LoginView extends StatefulWidget {
@@ -77,65 +77,48 @@ class _LoginViewState extends State<LoginView> {
                   if (email.isEmpty || password.isEmpty) {
                     showCustomSnackBar(context, "fill all fields");
                     return;
-
-                  }
-                  else {try {
-                    final userCredential = await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-                         final user = FirebaseAuth.instance.currentUser;
-                         if (!context.mounted) return;
-                        if (user!= null) {
-                          if (user.emailVerified) {
-                            showCustomSnackBar(context, "email verifed");
-                            Navigator.pushReplacementNamed(context, notesRoute);
-                          }
-                          
+                  } else {
+                    try {
+                      final userCredential = await AuthService.firebase().login(
+                        email: email,
+                        password: password,
+                      );
+                      final user = AuthService.firebase().currentUser;
+                      if (!context.mounted) return;
+                      if (user != null) {
+                        if (user.isEmailVerified) {
+                          showCustomSnackBar(context, "email verifed");
+                          Navigator.pushReplacementNamed(context, notesRoute);
                         }
-                        else {
-                          showCustomSnackBar(context, "something went wrong");
-                        }
-                        if (!mounted)return;
-                        devtool.log(userCredential.toString());
-
-
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == "invalid-email") {
-                      if(!mounted)return;
-                     showCustomSnackBar(context, "enter a valid email");
-                    }
-                    else if (e.code == "wrong-password") {
+                      } else {
+                        showCustomSnackBar(context, "something went wrong");
+                      }
+                      if (!mounted) return;
+                      devtool.log(userCredential.toString());
+                    } on InvalidEmail {
+                      if (!mounted) return;
+                      showCustomSnackBar(context, "enter a valid email");
+                    } on WrongPassword {
                       showCustomSnackBar(context, "wrong password");
-                    }
-                    else if (e.code == "user-not-found") {
+                    } on UserNotFound {
                       showCustomSnackBar(context, "user not found");
-                    }
-                    else {
-                      showCustomSnackBar(context, "${e.message}");
+                    } on GenericException {
+                      showCustomSnackBar(context, "something went wrong");
                     }
                   }
-                  catch (_) {
-                    showCustomSnackBar(context, "something went wrong,try again");
-                  }
-                     
-                    }
-        
-                     
-                      
                 },
                 child: const Text(
                   "Login",
                   style: TextStyle(fontSize: 35, color: Colors.white60),
                 ),
-                
               ),
-              
             ),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context, registerRoute);
-            }, child: const Text("haven't registered yet! register here"),),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, registerRoute);
+              },
+              child: const Text("haven't registered yet! register here"),
+            ),
           ],
         ),
       ),

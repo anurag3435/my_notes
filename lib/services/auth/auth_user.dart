@@ -6,6 +6,8 @@ class AuthUser {
   factory AuthUser.fromFirebase(User? user) {
     return AuthUser(user?.emailVerified ?? false);
   }
+
+  Future<void> reload() async {}
 }
 
 //  factory just gets the user from firebase and make a custom user with the properties

@@ -1,4 +1,4 @@
-//before working on this file first read all the previous files 
+//before working on this file first read all the previous files
 //  ESPECIALLY SNACKBAR
 
 /* 
@@ -8,10 +8,10 @@ things to do in verifyEmailView:
 - three buttons (sendEmailverify,verficationStatus,go back to login page)
 */
 // front end done!
-// backend still left to do!! 
-import 'package:firebase_auth/firebase_auth.dart';
+// backend still left to do!! 16 august done !
 import 'package:flutter/material.dart';
 import 'package:my_notes/constants/routes.dart';
+import 'package:my_notes/services/auth/auth_service.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -24,66 +24,73 @@ class VerifyEmail extends StatefulWidget {
 class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-            title: const Text("verifyEmail"),
-            backgroundColor: Colors.blueGrey,
-        ),
-        body:Padding(
-          padding: const EdgeInsets.only(top: 300),
-          child: Center(child: Column(children: [
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("verifyEmail"),
+        backgroundColor: Colors.blueGrey,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 300),
+        child: Center(
+          child: Column(
+            children: [
               TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
-                  onPressed: () async{
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user!= null) {
-                  await user.sendEmailVerification(); 
-                  showCustomSnackBar(context, "email verification sent");
-                  }
-                  else {
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),
+                ),
+                onPressed: () async {
+                  final user = AuthService.firebase().currentUser;
+                  if (user != null) {
+                    await AuthService.firebase().sendEmailVerification();
+                    showCustomSnackBar(context, "email verification sent");
+                  } else {
                     showCustomSnackBar(context, "no user found");
                   }
-                  }, 
-                  child: const Text("send verfication email",
-                style: TextStyle(color: Colors.white),)),
-                
+                },
+                child: const Text(
+                  "send verfication email",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
 
               TextButton(
                 style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
-                onPressed: () async{
-                  final user = FirebaseAuth.instance.currentUser;
+                  backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),
+                ),
+                onPressed: () async {
+                  final user = AuthService.firebase().currentUser;
                   user?.reload();
-                  if(user!= null) {
-                    if (user.emailVerified) {
+                  if (user != null) {
+                    if (user.isEmailVerified) {
                       showCustomSnackBar(context, "email verified");
                       Navigator.pushReplacementNamed(context, notesRoute);
-                    }
-                    else {
+                    } else {
                       showCustomSnackBar(context, "something went wrong");
                     }
                   }
-
-
                 },
-                child: const Text("verification status",
-                style: TextStyle(color: Colors.white),)),
-              
+                child: const Text(
+                  "verification status",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
 
               TextButton(
                 style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),),
-                onPressed: () async{
+                  backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),
+                ),
+                onPressed: () async {
                   Navigator.pushReplacementNamed(context, loginRoute);
                 },
-                child: const Text("back to login",
-                style: TextStyle(color: Colors.white),)),
-              
-          ],
-          ),
+                child: const Text(
+                  "back to login",
+                  style: TextStyle(color: Colors.white),
                 ),
+              ),
+            ],
+          ),
         ),
+      ),
     );
   }
 }

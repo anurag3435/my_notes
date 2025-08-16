@@ -1,8 +1,8 @@
 import "dart:developer" as devtool;
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_notes/constants/routes.dart';
+import 'package:my_notes/services/auth/auth_exceptions.dart';
+import 'package:my_notes/services/auth/auth_service.dart';
 import 'package:my_notes/utilities/snackbar.dart';
 
 class RegisterView extends StatefulWidget {
@@ -77,55 +77,38 @@ class _RegisterViewState extends State<RegisterView> {
                   if (email.isEmpty || password.isEmpty) {
                     showCustomSnackBar(context, "fill all fields");
                     return;
-
-                  }
-                  else {try {
-                    final userCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        );
-                        if (!context.mounted)return;
-                        devtool.log(userCredential.toString());
-                        showCustomSnackBar(context, "registered successfully");
-                        Navigator.pushReplacementNamed(context, emailVerifyRoute);
-
-
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == "invalid-email") {
-                      if(!mounted)return;
-                     showCustomSnackBar(context, "enter valid email");
-                    }
-                    else if (e.code == "weak-password") {
+                  } else {
+                    try {
+                      final userCredential = await AuthService.firebase()
+                          .register(email: email, password: password);
+                      if (!context.mounted) return;
+                      devtool.log(userCredential.toString());
+                      showCustomSnackBar(context, "registered successfully");
+                      Navigator.pushReplacementNamed(context, emailVerifyRoute);
+                    } on InvalidEmail {
+                      if (!mounted) return;
+                      showCustomSnackBar(context, "enter valid email");
+                    } on WeakPassword {
                       showCustomSnackBar(context, "use a mixed password");
-                    }
-                    else if (e.code == "email-already-in-use") {
+                    } on EmailAlreadyInUse {
                       showCustomSnackBar(context, "email already in use");
-                    }
-                    else {
-                      showCustomSnackBar(context, "${e.message}");
+                    } on GenericException {
+                      showCustomSnackBar(context, "something went wrong");
                     }
                   }
-                  catch (_) {
-                    showCustomSnackBar(context, "something went wrong,try again");
-                  }
-                     
-                    }
-        
-                     
-                      
                 },
                 child: const Text(
                   "Register",
                   style: TextStyle(fontSize: 35, color: Colors.white60),
                 ),
-                
               ),
-              
             ),
-            TextButton(onPressed: () {
-              Navigator.pushReplacementNamed(context, loginRoute);
-            }, child: const Text("already login? login here!"),),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, loginRoute);
+              },
+              child: const Text("already login? login here!"),
+            ),
           ],
         ),
       ),
