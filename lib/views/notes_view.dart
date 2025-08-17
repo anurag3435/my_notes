@@ -48,7 +48,7 @@ class _NotesViewState extends State<NotesView> {
           ),
         ],
       ),
-      body: Center(child: Column(children: [const Text("no notes yet!")])),
+      body: Center(child: const Text("no notes yet!")),
     );
   }
 }

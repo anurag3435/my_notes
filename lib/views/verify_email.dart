@@ -42,6 +42,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   final user = AuthService.firebase().currentUser;
                   if (user != null) {
                     await AuthService.firebase().sendEmailVerification();
+                    if (!context.mounted) return;
+
                     showCustomSnackBar(context, "email verification sent");
                   } else {
                     showCustomSnackBar(context, "no user found");
@@ -58,9 +60,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   backgroundColor: WidgetStatePropertyAll(Colors.blueGrey),
                 ),
                 onPressed: () async {
+                  if (!context.mounted) return;
+                  await AuthService.firebase().reload();
                   final user = AuthService.firebase().currentUser;
-                  user?.reload();
                   if (user != null) {
+                    if (!context.mounted) return;
                     if (user.isEmailVerified) {
                       showCustomSnackBar(context, "email verified");
                       Navigator.pushReplacementNamed(context, notesRoute);
