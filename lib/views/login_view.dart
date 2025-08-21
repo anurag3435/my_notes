@@ -86,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
                       final user = AuthService.firebase().currentUser;
                       if (!context.mounted) return;
                       if (user != null) {
-                        if (user.isEmailVerified) {
+                        if (user.emailVerified) {
                           showCustomSnackBar(context, "email verifed");
                           Navigator.pushReplacementNamed(context, notesRoute);
                         }

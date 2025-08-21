@@ -24,6 +24,4 @@ void main() async {
     ),
   );
 }
-// problems i am facing 
-// veri status not working 
-
+// i have skipped unit testing for now and has move forward

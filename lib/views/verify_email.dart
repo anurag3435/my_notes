@@ -65,7 +65,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   final user = AuthService.firebase().currentUser;
                   if (user != null) {
                     if (!context.mounted) return;
-                    if (user.isEmailVerified) {
+                    if (user.emailVerified) {
                       showCustomSnackBar(context, "email verified");
                       Navigator.pushReplacementNamed(context, notesRoute);
                     } else {
