@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_notes/constants/routes.dart';
 
+List<String> notes = [];
+
 class CreateNotesView extends StatefulWidget {
-  const CreateNotesView({super.key});
+  final int? noteIndex;
+  const CreateNotesView({super.key, this.noteIndex});
 
   @override
   State<CreateNotesView> createState() => _CreateNotesViewState();
@@ -10,6 +13,14 @@ class CreateNotesView extends StatefulWidget {
 
 class _CreateNotesViewState extends State<CreateNotesView> {
   final _noteController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    if (widget.noteIndex != null) {
+      _noteController.text = notes[widget.noteIndex!]; // load note text
+    }
+  }
+
   @override
   void dispose() {
     _noteController.dispose();
@@ -28,6 +39,19 @@ class _CreateNotesViewState extends State<CreateNotesView> {
           },
           icon: const Icon(Icons.arrow_back, color: Colors.purpleAccent),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              if (widget.noteIndex == null) {
+                notes.add(_noteController.text);
+              } else {
+                notes[widget.noteIndex!] = _noteController.text;
+              }
+              Navigator.pushReplacementNamed(context, notesRoute);
+            },
+            icon: Icon(Icons.save, color: Colors.purpleAccent),
+          ),
+        ],
       ),
       body: ListView(
         children: [
