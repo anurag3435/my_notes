@@ -26,3 +26,4 @@ void main() async {
   );
 }
 // i have skipped unit testing for now and has move forward
+// gonna implement firebase today, internet problem solution 

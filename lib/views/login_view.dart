@@ -4,6 +4,8 @@ import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/services/auth/auth_exceptions.dart';
 import 'package:my_notes/services/auth/auth_service.dart';
 import 'package:my_notes/utilities/snackbar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:io';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -15,6 +17,20 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _emailcontroller = TextEditingController();
   final _passwordcontroller = TextEditingController();
+
+  Future<bool> _hasnetwork() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    }
+    try {
+      final result = await InternetAddress.lookup("google.com");
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException {
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _emailcontroller.dispose();
@@ -75,6 +91,12 @@ class _LoginViewState extends State<LoginView> {
                 onPressed: () async {
                   final email = _emailcontroller.text;
                   final password = _passwordcontroller.text;
+                  final online = await _hasnetwork();
+                  if (!context.mounted) return;
+                  if (!online) {
+                    showCustomSnackBar(context, "No Internet Connection!");
+                    return;
+                  }
                   if (email.isEmpty || password.isEmpty) {
                     showCustomSnackBar(context, "fill all fields");
                     return;
